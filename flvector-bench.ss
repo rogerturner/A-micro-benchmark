@@ -31,7 +31,7 @@
   (repeat make-fl*vector flvector-set!  flvector-sum  "unroll make ")
   (repeat make-flvector  flvector-set!  fl*vector-sum "unroll sum ")
   (repeat make-fl*vector flvector-set!  fl*vector-sum "unroll both ")
-  (repeat make-fl.vector fl.vector-set! fl.vector-sum "fl. struct+unroll ")
+  (repeat make-fl.vector fl.vector-set! fl.vector-sum "fl. +unroll ")
   (repeat make-fl.vector (lambda _ #f)  fl.vector-sum "fl. \"lazy\" :-) "))
 
 (run)  ;; (to run without "whole program" compilation)
@@ -97,13 +97,13 @@ unroll both 50000.0
     0.075367584s elapsed cpu time, including 0.002303000s collecting
     0.075367000s elapsed real time, including 0.002339000s collecting
     800091696 bytes allocated, including 801707520 bytes reclaimed
-fl. data struct 50000.0
+fl. +unroll 50000.0
 (time (do ((...)) ...))
     91 collections
     0.075227834s elapsed cpu time, including 0.002293000s collecting
     0.075224000s elapsed real time, including 0.002343000s collecting
     800107696 bytes allocated, including 801723424 bytes reclaimed
-:-) 50000.0
+fl. "lazy" 50000.0
 (time (do ((...)) ...))
     no collections
     0.000007041s elapsed cpu time

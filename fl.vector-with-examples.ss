@@ -4,7 +4,7 @@
 
 #!chezscheme
 
-(library (fl.vector-examples)
+(library (fl.vector-with-examples)
   (export make-fl.vector fl.vector-sum fl.vector-length fl.vector-ref fl.vector-set!
           make-fl*vector fl*vector-sum)
   (import (chezscheme) (check-examples))

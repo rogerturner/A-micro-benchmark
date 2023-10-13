@@ -9,15 +9,13 @@
           make-fl*vector fl*vector-sum)
   (import (chezscheme))
 
+(eval-when (compile) (generate-interrupt-trap #f))         
+
 #| a Fl.vector is either
    a Pair: (Fixnum . Flonum)  [length . fill value]
         or (Flvector . Unused)
-   or a Flvector
+   or a Flvector  [fl.vector- procedures can be applied to flvector arguments] |#
    
-   (fl.vector- procedures can be applied to flvector arguments)   |#
-   
-(eval-when (compile) (generate-interrupt-trap #f))         
-
 (define (make-fl.vector len flval)       ;; Fixnum Flonum -> Fl.vector
   (cons len flval))
   
@@ -28,6 +26,14 @@
         (* cf (cdr flvec))
         (fl*vector-sum cf)))
     (fl*vector-sum flvec)))
+
+(define (fl.vector-set! flvec i flval)   ;; Fl.vector Fixnum Flonum ->
+  (if (pair? flvec)
+    (let ([cf (car flvec)])
+      (when (fixnum? cf)
+        (set-car! flvec (make-fl*vector cf (cdr flvec))))
+      (flvector-set! (car flvec) i flval))
+    (flvector-set! flvec i flval)))
 
 (define (fl.vector-length flvec)         ;; Fl.vector -> Fixnum
   (if (pair? flvec)
@@ -43,14 +49,6 @@
           (flvector-ref cf i)))
     (flvector-ref flvec i)))
       
-(define (fl.vector-set! flvec i flval)   ;; Fl.vector Fixnum Flonum ->
-  (if (pair? flvec)
-    (let ([cf (car flvec)])
-      (when (fixnum? cf)
-        (set-car! flvec (make-fl*vector cf (cdr flvec))))
-      (flvector-set! (car flvec) i flval))
-    (flvector-set! flvec i flval)))
-
 (define (make-fl*vector len flval)       ;; Fixnum Flonum -> Flvector
   (let ([flvec (make-flvector len)]
         [flval (fl+ flval)]
