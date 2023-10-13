@@ -12,12 +12,8 @@
 #| a Fl.vector is either
    a Pair: (Fixnum . Flonum)  [length . fill value]
         or (Flvector . Unused)
-   or a Flvector
+   or a Flvector  [fl.vector- procedures can be applied to flvector arguments] |#
    
-   (fl.vector- procedures can be applied to flvector arguments)   |#
-   
-(eval-when (compile) (generate-interrupt-trap #f))         
-
 (define (make-fl.vector len flval)       ;; Fixnum Flonum -> Fl.vector
   (example: (make-fl.vector 2 2.0) => '(2 . 2.0) )
   (cons len flval))
@@ -56,7 +52,7 @@
 (define (fl.vector-set! flvec i flval)   ;; Fl.vector Fixnum Flonum ->
   (example: (let ([FLV.22 FLV.22])
               (fl.vector-set! FLV.22 0 1.0)
-              FLV.22) => (cons #vfl(1.0 2.0) 2.0) )
+              FLV.22) => '(#vfl(1.0 2.0) . 2.0) )
   (if (pair? flvec)
     (let ([cf (car flvec)])
       (when (fixnum? cf)
@@ -106,7 +102,12 @@
 
 (check-examples)
 
-(for-each display `(,(let-syntax ([n (lambda _ (length *examples*))]) n)" examples checked\n"))
+(for-each display `(  ;; get n examples and clear *examples*
+    ,(let-syntax ([n (lambda _ 
+                       (let ([n (length *examples*)])
+                         (set-examples (list))
+                         n) )]) n)
+    " examples checked\n"))
 
 )
 
